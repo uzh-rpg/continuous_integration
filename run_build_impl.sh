@@ -152,8 +152,7 @@ then
   # Make a separate workspace for the deps, so we can exclude them from cppcheck etc.
   mkdir -p $WORKSPACE/$DEPS
   cd $WORKSPACE/$DEPS
-  echo "- git: {local-name: $WORKSPACE/$DEPS/aslam_install, uri: 'git@github.com:ethz-asl/aslam_install.git'}" | wstool  merge -t $WORKSPACE/src -
-
+  
   if $CHECKOUT_CATKIN_SIMPLE; then
     echo "- git: {local-name: $WORKSPACE/$DEPS/catkin_simple, uri: '${CATKIN_SIMPLE_URL}'}" | wstool  merge -t $WORKSPACE/src -
   fi
@@ -164,11 +163,10 @@ then
   then
     wstool init || true
   fi
-  # Remove the entry from the provided rosinstall that specifies this repository itself (if any).
-  grep -iv $repo_url_self ${WORKSPACE}/${DEPS}/aslam_install/rosinstall/${DEPENDENCIES} > dependencies.rosinstall
+  
   echo "Rosinstall to use:"
-  cat dependencies.rosinstall
-  wstool merge -t . dependencies.rosinstall
+  cat $DEPENDENCIES
+  wstool merge -t . $DEPENDENCIES
   wstool update -t . -j8
 else
   DEPENDENCIES="${DEPENDENCIES} ${CATKIN_SIMPLE_URL}"
