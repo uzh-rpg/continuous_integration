@@ -1,7 +1,7 @@
 #!/bin/bash -e
 export PATH=/usr/local/bin/:$PATH
 
-source /opt/ros/indigo/setup.sh
+source /opt/ros/jade/setup.sh
 # Get the directory of this script.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -135,7 +135,7 @@ mkdir -p $WORKSPACE/$DEPS && cd $WORKSPACE/$DEPS
 
 if [[ $DEPENDENCIES == *.rosinstall ]]
 then
-  source /opt/ros/indigo/setup.sh
+  source /opt/ros/jade/setup.sh
   cd $WORKSPACE/src
   catkin_init_workspace || true
   if [ ! -f .rosinstall ]
