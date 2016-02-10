@@ -85,7 +85,7 @@ fi
 # If the package has a dependencies.rosinstall file, we overwrite the build-job config dep list.
 if [ -f "${REP}/dependencies.rosinstall" ]; then
   echo "Rosinstall file: ${REP}/dependencies.rosinstall found, overwriting specified dependencies."
-  DEPENDENCIES=${REP}/dependencies.rosinstall
+  DEPENDENCIES=$(pwd)/${REP}/dependencies.rosinstall
 fi
 
 # If the build job specifies a rosinstall file, we overwrite the build-job config dep list.
