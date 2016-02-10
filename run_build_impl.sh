@@ -82,6 +82,12 @@ if [ -z "$PACKAGES" ]; then
   echo "Found $PACKAGES by autodiscovery."
 fi
 
+# If the package has a dependencies.rosinstall file, we overwrite the build-job config dep list.
+if [ -f "${REP}/dependencies.rosinstall" ]; then
+  echo "Rosinstall file: ${REP}/dependencies.rosinstall found, overwriting specified dependencies."
+  DEPENDENCIES=${REP}/dependencies.rosinstall
+fi
+
 # If the build job specifies a rosinstall file, we overwrite the build-job config dep list.
 if [ -z "$rosinstall_file" ]; then
   echo "No rosinstall file specified, using dependency list from build-job config."
