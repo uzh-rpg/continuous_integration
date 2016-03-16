@@ -82,17 +82,17 @@ if [ -z "$PACKAGES" ]; then
   echo "Found $PACKAGES by autodiscovery."
 fi
 
-# If the package has a dependencies.rosinstall file, we overwrite the build-job config dep list.
-if [ -f "${REP}/dependencies.rosinstall" ]; then
-  echo "Rosinstall file: ${REP}/dependencies.rosinstall found, overwriting specified dependencies."
-  DEPENDENCIES=$(pwd)/${REP}/dependencies.rosinstall
+# If the package has a dependencies.yaml file, we overwrite the build-job config dep list.
+if [ -f "${REP}/dependencies.yaml" ]; then
+  echo "Rosinstall file: ${REP}/dependencies.yaml found, overwriting specified dependencies."
+  DEPENDENCIES=$(pwd)/${REP}/dependencies.yaml
 fi
 
-# If the build job specifies a rosinstall file, we overwrite the build-job config dep list.
+# If the build job specifies a VCS yaml file, we overwrite the build-job config dep list.
 if [ -z "$rosinstall_file" ]; then
-  echo "No rosinstall file specified, using dependency list from build-job config."
+  echo "No VCS yaml file specified, using dependency list from build-job config."
 else
-  echo "Rosinstall file: $rosinstall_file specified, overwriting specified dependencies."
+  echo "VCS yaml file: $rosinstall_file specified, overwriting specified dependencies."
   DEPENDENCIES=$rosinstall_file
 fi
 
@@ -139,35 +139,21 @@ else
 fi
 mkdir -p $WORKSPACE/$DEPS && cd $WORKSPACE/$DEPS
 
-if [[ $DEPENDENCIES == *.rosinstall ]]
+if [[ $DEPENDENCIES == *.yaml ]]
 then
   source /opt/ros/jade/setup.sh
   cd $WORKSPACE/src
   catkin_init_workspace || true
-  if [ ! -f .rosinstall ]
-  then
-    wstool init || true
-  fi
-
+  
   # Make a separate workspace for the deps, so we can exclude them from cppcheck etc.
   mkdir -p $WORKSPACE/$DEPS
   cd $WORKSPACE/$DEPS
   
-  if $CHECKOUT_CATKIN_SIMPLE; then
-    echo "- git: {local-name: $WORKSPACE/$DEPS/catkin_simple, uri: '${CATKIN_SIMPLE_URL}'}" | wstool  merge -t $WORKSPACE/src -
-  fi
-  wstool update -t $WORKSPACE/src -j8
-
-  echo "Dependencies specified by rosinstall file.";
-  if [ ! -f .rosinstall ]
-  then
-    wstool init || true
-  fi
+  echo "Dependencies specified by VCS yaml file.";
   
-  echo "Rosinstall to use:"
+  echo "Yaml to use:"
   cat $DEPENDENCIES
-  wstool merge -t . $DEPENDENCIES
-  wstool update -t . -j8
+  vcs-import < $DEPENDENCIES
 else
   DEPENDENCIES="${DEPENDENCIES} ${CATKIN_SIMPLE_URL}"
 
