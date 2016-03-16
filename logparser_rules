@@ -1,5 +1,3 @@
-# Ignore cmake warnings:
-ok /^CMake/
 # Some classes end with Error e.g. MarginalizationError, where the scoping :: helps to disambiguate.
 ok /[Ee]rror::/
 # Failures to init Gui
