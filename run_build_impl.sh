@@ -1,7 +1,7 @@
 #!/bin/bash -e
 export PATH=/usr/local/bin/:$PATH
 
-source /opt/ros/jade/setup.sh
+source /opt/ros/kinetic/setup.sh
 # Get the directory of this script.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
