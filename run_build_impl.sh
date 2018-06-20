@@ -141,7 +141,7 @@ mkdir -p $WORKSPACE/$DEPS && cd $WORKSPACE/$DEPS
 
 if [[ $DEPENDENCIES == *.yaml ]]
 then
-  source /opt/ros/jade/setup.sh
+  source /opt/ros/kinetic/setup.sh
   cd $WORKSPACE/src
   catkin_init_workspace || true
   
